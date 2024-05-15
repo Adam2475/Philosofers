@@ -1,5 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/15 16:57:29 by adapassa          #+#    #+#             */
+/*   Updated: 2024/05/15 17:37:56 by adapassa         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
-#include <limits.h>
+
+uint64_t	get_time(void)
+{
+	struct timeval tv;
+
+	if (gettimeofday(&tv, NULL))
+		return (printf("error while getting the time!\n"));
+	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
+}
 
 static int	ft_isdigit(int c)
 {
@@ -37,7 +57,6 @@ int	ft_strncmp(char *s1, char *s2, size_t n)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-// lucky we don't need negative values here :)
 int	ft_atoi(const char *str)
 {
 	int	sign;
@@ -60,7 +79,6 @@ int	ft_atoi(const char *str)
 		res = res * 10 + str[i] - 48;
 		i++;
 	}
-	// printf("%ld\n", res);
 	if (res > INT_MAX)
 		return (0);
 	return (sign * res);

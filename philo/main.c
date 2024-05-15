@@ -6,11 +6,53 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/15 16:31:35 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/15 17:42:16 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	*routine(void *philo_pointer)
+{
+	// t_philo *philo;
+	// philo = (t_philo *)philo_pointer;
+	printf("hello world");
+	exit(1);
+}
+
+// static	void	free_exit(t_controller *controller)
+// {
+// 	int	i;
+
+// 	i = -1;
+// 	while (++i < data->philo_num)
+// 	{
+// 		pthread_mutex_destroy(&data->forks[i]);
+// 		pthread_mutex_destroy(&data->philos[i].lock);
+// 	}
+// 	pthread_mutex_destroy(&data->write);
+// 	pthread_mutex_destroy(&data->lock);
+// 	clear_data(data);
+// }
+
+static	void	case_one(t_controller *controller)
+{
+	controller->start_time = get_time();
+	// printf("%lu\n", controller->start_time);
+	// exit(1);
+	if (pthread_create(&controller->tid[0], NULL, &routine, &controller->philos[0]))
+	{
+		printf("exited from the routine process!");
+		return;
+	}
+	
+	while (controller->dead_flag == false)
+		ft_usleep(0);
+
+	exit(1);
+	// free_exit(&controller);
+	return ;
+}
 
 int main(int ac, char **av)
 {
@@ -28,9 +70,12 @@ int main(int ac, char **av)
 	if (controller_init(&controller, av) != 0)
 		return (printf("bad time input\n"));
 	// init_philo(&philo, &controller);
-
-
 	
+	if (controller.num_of_philos == 1)
+		case_one(&controller);
+
+	// if (init_routine(controller) != 0)
+	// 	return (printf("exited from routine\n"));
 
 	//Debug
 	printf("num of philos: %d\n", controller.num_of_philos);

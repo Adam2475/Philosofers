@@ -1,4 +1,5 @@
 #include "philo.h"
+#include <limits.h>
 
 static int	ft_isdigit(int c)
 {
@@ -9,22 +10,39 @@ static int	ft_isdigit(int c)
 
 int str_is_digit(const char *str)
 {
-    while (*str)
+	while (*str)
 	{
-        if (ft_isdigit(*str) != 1)
+		if (ft_isdigit(*str) != 1)
 		{
-            return (1); // Not a digit
-        }
-        str++;
-    }
-    return (0); // All characters are digits
+			return (1);
+		}
+		str++;
+	}
+	return (0);
 }
 
+int	ft_strncmp(char *s1, char *s2, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (n == 0)
+		return (0);
+	while ((s1[i] || s2[i]) && (i < n - 1))
+	{
+		if (s1[i] != s2[i] || i >= n)
+			break ;
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+// lucky we don't need negative values here :)
 int	ft_atoi(const char *str)
 {
 	int	sign;
 	int	i;
-	int	res;
+	long int	res;
 
 	i = 0;
 	sign = 1;
@@ -34,9 +52,7 @@ int	ft_atoi(const char *str)
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-		{
 			sign *= -1;
-		}
 		i++;
 	}
 	while (str[i] >= 48 && str[i] <= 57)
@@ -44,5 +60,8 @@ int	ft_atoi(const char *str)
 		res = res * 10 + str[i] - 48;
 		i++;
 	}
+	// printf("%ld\n", res);
+	if (res > INT_MAX)
+		return (0);
 	return (sign * res);
 }

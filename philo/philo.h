@@ -24,30 +24,33 @@
 
 typedef struct s_philo
 {
-	int	id;
-	pthread_t api_data;
-	size_t last_meal;
+	int				id;
+	pthread_t		api_data;
+	size_t			last_meal;
 	pthread_mutex_t fork_l;
 	pthread_mutex_t fork_r;
-	// pthread_mutex_t	*write_lock;
-	// pthread_mutex_t	*dead_lock;
-	// pthread_mutex_t	*meal_lock;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	bool			dead_flag;
+	int				target_meals;
 }	t_philo;
 
 typedef struct s_controller
 {
-	pthread_t	*tid;
-	bool		dead_flag;
-	int			num_of_philos;
-	size_t		time_to_die;
-	size_t		time_to_eat;
-	size_t		time_to_sleep;
-	int			n_times_to_eat;
-	uint64_t	start_time;
-	t_philo		*philos;
-	// pthread_mutex_t	dead_lock;
-	// pthread_mutex_t	meal_lock;
-	// pthread_mutex_t	write_lock;
+	pthread_t		*tid;
+	pthread_mutex_t *forks;
+	bool			dead_flag;
+	int				num_of_philos;
+	size_t			time_to_die;
+	size_t			time_to_eat;
+	size_t			time_to_sleep;
+	int				n_times_to_eat;
+	uint64_t		start_time;
+	t_philo			*philos;
+	// pthread_mutex_t	*write_lock;
+	// pthread_mutex_t	*dead_lock;
+	// pthread_mutex_t	*meal_lock;
 }	t_controller;
 
 int			arg_parser(char **av);
@@ -55,9 +58,10 @@ int			str_is_digit(const char *str);
 int			ft_atoi(const char *str);
 int			controller_init(t_controller *elem, char **av);
 int			ft_strncmp(char *s1, char *s2, size_t n);
-// void	init_philo(t_controller *controller);
 uint64_t	get_time(void);
 int			ft_usleep(__useconds_t time);
 void		*routine(void *philo_pointer);
+void		init_multiple(t_controller *controller);
+
 
 #endif

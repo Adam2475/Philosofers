@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/15 17:37:26 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/18 20:02:00 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,15 @@ typedef struct s_philo
 	pthread_t		api_data;
 	size_t			last_meal;
 	pthread_mutex_t fork_l;
-	pthread_mutex_t fork_r;
-	size_t			time_to_die;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
-	bool			dead_flag;
-	int				target_meals;
+	pthread_mutex_t 	fork_r;
+	size_t				time_to_die;
+	size_t				time_to_eat;
+	size_t				time_to_sleep;
+	bool				dead_flag;
+	int					meals_num;
+	int					target_meals;
+	// t_controller	*controller;
+	struct	s_controller	*controller;
 }	t_philo;
 
 typedef struct s_controller
@@ -62,6 +65,8 @@ uint64_t	get_time(void);
 int			ft_usleep(__useconds_t time);
 void		*routine(void *philo_pointer);
 void		init_multiple(t_controller *controller);
-
+char		*ft_itoa(int n);
+// Actions
+void		philo_die(t_philo *philo);
 
 #endif

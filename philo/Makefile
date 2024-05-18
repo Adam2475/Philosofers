@@ -5,6 +5,7 @@ CC = cc
 CFLAGS = -pthread
 
 SRC = main.c parsing.c utils.c init.c \
+		itoa.c actions.c \
 
 OBJ = $(SRC:.c=.o)
 

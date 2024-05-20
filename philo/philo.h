@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/18 20:02:00 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/20 19:45:11 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 
 typedef struct s_philo
 {
-	int				id;
-	pthread_t		api_data;
-	size_t			last_meal;
-	pthread_mutex_t fork_l;
-	pthread_mutex_t 	fork_r;
+	int					id;
+	pthread_t			api_data;
+	size_t				last_meal;
+	pthread_mutex_t		*fork_l;
+	pthread_mutex_t 	*fork_r;
 	size_t				time_to_die;
 	size_t				time_to_eat;
 	size_t				time_to_sleep;
@@ -65,6 +65,8 @@ uint64_t	get_time(void);
 int			ft_usleep(__useconds_t time);
 void		*routine(void *philo_pointer);
 void		init_multiple(t_controller *controller);
+int			init_routine(t_controller *controller);
+void		distribute_forks(t_controller *controller);
 char		*ft_itoa(int n);
 // Actions
 void		philo_die(t_philo *philo);

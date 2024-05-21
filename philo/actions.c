@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:33:50 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/18 20:04:40 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:36:08 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,10 @@
 // 	printf("philo has taken a fork");
 // }
 
-void    philo_eat()
+void    philo_eat(t_philo *philo)
 {
-	printf("philo is eating");
+	printf("%d\n", philo->id);
+	printf("philo is eating\n");
 }
 
 void    philo_sleep()
@@ -41,6 +42,8 @@ void	philo_die(t_philo *philo)
 
 	timestamp = ft_itoa(get_time() - philo->controller->start_time);
 	printf("%sms, philo %d: has died!\n", timestamp, philo->id);
+	philo->controller->dead_flag = true;
+	free(timestamp);
 }
 
 // void    philo_print(char *msg, t_philo *philo, int unlock)

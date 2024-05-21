@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/20 19:45:11 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:35:00 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_philo
 	size_t				time_to_eat;
 	size_t				time_to_sleep;
 	bool				dead_flag;
-	int					meals_num;
+	// int					meals_num;
 	int					target_meals;
 	// t_controller	*controller;
 	struct	s_controller	*controller;
@@ -64,10 +64,10 @@ int			ft_strncmp(char *s1, char *s2, size_t n);
 uint64_t	get_time(void);
 int			ft_usleep(__useconds_t time);
 void		*routine(void *philo_pointer);
-void		init_multiple(t_controller *controller);
 int			init_routine(t_controller *controller);
 void		distribute_forks(t_controller *controller);
 char		*ft_itoa(int n);
+void		philo_eat(t_philo *philo);
 // Actions
 void		philo_die(t_philo *philo);
 

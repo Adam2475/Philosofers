@@ -2,7 +2,7 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -pthread
+CFLAGS = -pthread -Wall -Wextra -Werror
 
 SRC = main.c parsing.c utils.c init.c \
 		itoa.c actions.c \

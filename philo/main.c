@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/20 19:58:06 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:52:20 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	distribute_forks(t_controller *controller)
 		// printf("philo num : %d fork_l : %p\n", i,  controller->philos[i].fork_l);
 		i++;
 	}
-	printf("-------------------------------\nInitializing the main routine!\n-------------------------------\n");
 	init_routine(controller);
 }
 
@@ -62,11 +61,6 @@ int	init_routine(t_controller *controller)
 		pthread_join(controller->tid[j], NULL);
 	}
 	return (0);
-}
-
-void	init_multiple(t_controller *controller)
-{
-	return ;
 }
 
 static	void	ft_init_mutex(t_controller *controller)
@@ -106,7 +100,6 @@ void	init_philos(t_controller *controller)
 		controller->philos[i].time_to_sleep = controller->time_to_sleep;
 		controller->philos[i].dead_flag = false;
 		controller->philos[i].target_meals = controller->n_times_to_eat;
-		controller->philos[i].meals_num = 0;
 		controller->philos[i].id = i + 1;
 		controller->philos[i].controller = controller;
 		i++;
@@ -130,7 +123,7 @@ static	void	*routine_solo(void *philo_pointer)
 		if (get_time() - philo->controller->start_time >= philo->controller->time_to_die)
 		{
 			philo_die(philo);
-			exit(1);
+			return (NULL);
 		}
 		ft_usleep(1);
 	}
@@ -139,27 +132,47 @@ static	void	*routine_solo(void *philo_pointer)
 
 void	*routine(void *philo_pointer)
 {
-	// t_philo	*philo;
-	// int		i;
 
-	// philo = (t_philo *)philo_pointer;
-	// i = 0;
-	// while (i < philo[0].target_meals)
-	// {
-	// 	i++;
-	// 	philo[0].meals_num += 1;
-	// 	printf("meal n: %d\n", philo[0].meals_num);
-	// }
-	printf("hello world");
+	t_philo	*philo;
+	int		i;
+
+	philo = (t_philo *)philo_pointer;
+	i = 0;
+	while (philo->controller->dead_flag != true || i < philo->target_meals)
+	{
+		if (get_time() - philo->controller->start_time >= philo->controller->time_to_die)
+		{
+			philo_die(philo);
+			return (NULL);
+		}
+		philo_eat(philo);
+		ft_usleep(1);
+		i++;
+	}
+	// printf("hello world\n");
 	return (NULL);
 }
 
 static	void	free_exit(t_controller *controller)
 {
-	free(controller->philos);
-	free(controller->tid);
-	// free(controller->forks);
-	exit(0);
+	int	i;
+
+	i = 0;
+	while (i < controller->num_of_philos)
+	{
+		// free(&controller->philos[i]);
+		// free(&controller->tid[i]);
+		free(&controller->philos[i]);
+		pthread_mutex_destroy(&controller->forks[i]);
+		free(&controller->tid[i]);
+		i++;
+		printf("%d\n", i);
+	}
+	
+	// free(controller->tid);
+	//free(controller->forks);
+	
+	return ;
 }
 
 static	void	case_one(t_controller *controller)
@@ -176,6 +189,12 @@ static	void	case_one(t_controller *controller)
 	}
 
 	pthread_join(controller->tid[0], NULL);
+
+	// free(&controller->philos[0]);
+	// free(&controller->tid[0]);
+
+	// free(controller->philos);
+	// free(controller->tid);
 
 	free_exit(controller);
 	return ;

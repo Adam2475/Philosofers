@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:33:50 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/21 18:36:08 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:47:58 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,12 @@
 
 void    philo_eat(t_philo *philo)
 {
-	printf("%d\n", philo->id);
-	printf("philo is eating\n");
+	char	*timestamp;
+
+	timestamp = ft_itoa(get_time() - philo->controller->start_time);
+	philo_print(philo, 1);
+	ft_usleep(philo->time_to_eat);
+	philo->last_meal = (size_t)timestamp;
 }
 
 void    philo_sleep()
@@ -40,16 +44,25 @@ void	philo_die(t_philo *philo)
 {
 	char	*timestamp;
 
+	//philo->controller->dead_lock = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * 1);
+	//pthread_mutex_lock(philo->controller->dead_lock);
 	timestamp = ft_itoa(get_time() - philo->controller->start_time);
 	printf("%sms, philo %d: has died!\n", timestamp, philo->id);
 	philo->controller->dead_flag = true;
 	free(timestamp);
+	//pthread_mutex_unlock(philo->controller->dead_lock);
 }
 
-// void    philo_print(char *msg, t_philo *philo, int unlock)
-// {
-// 	char    *timestamp;
+void    philo_print(t_philo *philo, int unlock)
+{
+	char    *timestamp;
 
-// 	time
-// 	timestamp = ft_itoa(get_time() - controller->start_time);
-// }
+	timestamp = ft_itoa(get_time() - philo->controller->start_time);
+	if (unlock == 1)
+	{
+		pthread_mutex_lock(philo->controller->write_lock);
+		printf("%sms, philo %d: is eating!\n", timestamp, philo->id);
+		pthread_mutex_unlock(philo->controller->write_lock);
+	}
+		
+}

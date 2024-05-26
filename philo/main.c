@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/21 18:52:20 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:52:29 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,63 +26,9 @@ void	distribute_forks(t_controller *controller)
 			controller->philos[i].fork_r = &controller->forks[i - 1];
 		}
 		controller->philos[i].fork_l = &controller->forks[i];
-		//Debugging
-		// printf("adress of fork number: %d : %p\n", i,  &controller->forks[i]);
-		// printf("philo num : %d fork_l : %p\n", i,  controller->philos[i].fork_l);
-		// printf("philo num : %d fork_r : %p\n", i, controller->philos[i].fork_r);
-		// controller->philos[i].fork_l = &controller->forks[i];
-		// printf("philo num : %d fork_l : %p\n", i,  controller->philos[i].fork_l);
 		i++;
 	}
 	init_routine(controller);
-}
-
-int	init_routine(t_controller *controller)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (i < controller->num_of_philos)
-	{
-		if (pthread_create(&controller->tid[i], NULL, &routine, &controller->philos[i]) != 0)
-		{
-			printf("error in initializing routine!\n");
-			return (1);
-		}
-		i++;
-	}
-	j = i;
-	while (j > 0)
-	{
-		j--;
-		ft_usleep(1);
-		pthread_join(controller->tid[j], NULL);
-	}
-	return (0);
-}
-
-static	void	ft_init_mutex(t_controller *controller)
-{
-	int	i;
-
-	i = 0;
-	while (i < controller->num_of_philos)
-	{
-		if (pthread_mutex_init(&controller->forks[i], NULL) != 0)
-		{
-			printf("error initializing forks!\n");
-			exit(1);
-		}
-		i++;
-	}
-}
-
-static	void	init_forks(t_controller *controller)
-{
-	controller->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * controller->num_of_philos);
-	ft_init_mutex(controller);
 }
 
 void	init_philos(t_controller *controller)
@@ -102,6 +48,12 @@ void	init_philos(t_controller *controller)
 		controller->philos[i].target_meals = controller->n_times_to_eat;
 		controller->philos[i].id = i + 1;
 		controller->philos[i].controller = controller;
+
+		controller->philos[i].last_meal = get_time() - controller->start_time;
+		//controller->start_time = get_time();
+		//controller->philos[i]->controller->start_time = controller->start_time;
+		//printf("%lu\n", controller->start_time);
+		//printf("%lu\n", controller->philos[i].controller->start_time);
 		i++;
 	}
 	if (controller->num_of_philos != 1)
@@ -113,91 +65,44 @@ void	init_philos(t_controller *controller)
 	}
 }
 
-static	void	*routine_solo(void *philo_pointer)
+void	*supervisor(void *philo_pointer)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_pointer;
 	while (philo->controller->dead_flag == false)
 	{
-		if (get_time() - philo->controller->start_time >= philo->controller->time_to_die)
+		if (philo->last_meal >= philo->time_to_die)
 		{
-			philo_die(philo);
-			return (NULL);
+			//printf("%lu\n", philo->time_to_die);
+			printf("%lu\n", (philo->last_meal));
+			printf("%lu\n", (get_time() - philo->controller->start_time));
+			philo->controller->dead_flag = true;
 		}
-		ft_usleep(1);
 	}
 	return (NULL);
 }
 
 void	*routine(void *philo_pointer)
 {
-
 	t_philo	*philo;
-	int		i;
 
 	philo = (t_philo *)philo_pointer;
-	i = 0;
-	while (philo->controller->dead_flag != true || i < philo->target_meals)
+	if (pthread_create(&philo->supervisor_id, NULL, &supervisor, (void *)philo) != 0)
+	 	return (NULL);
+	while (philo->controller->dead_flag != true)
 	{
-		if (get_time() - philo->controller->start_time >= philo->controller->time_to_die)
+		if (philo->controller->dead_flag == true)
 		{
 			philo_die(philo);
-			return (NULL);
+			printf("ciao dal programma");
+			exit(1);
 		}
 		philo_eat(philo);
-		ft_usleep(1);
-		i++;
 	}
-	// printf("hello world\n");
+	if (pthread_join(philo->supervisor_id, NULL))
+		return (NULL);
 	return (NULL);
-}
-
-static	void	free_exit(t_controller *controller)
-{
-	int	i;
-
-	i = 0;
-	while (i < controller->num_of_philos)
-	{
-		// free(&controller->philos[i]);
-		// free(&controller->tid[i]);
-		free(&controller->philos[i]);
-		pthread_mutex_destroy(&controller->forks[i]);
-		free(&controller->tid[i]);
-		i++;
-		printf("%d\n", i);
-	}
-	
-	// free(controller->tid);
-	//free(controller->forks);
-	
-	return ;
-}
-
-static	void	case_one(t_controller *controller)
-{
-	controller->start_time = get_time();
-	controller->philos = (t_philo *)malloc(sizeof(t_philo) * 1);
-	controller->tid = (pthread_t *)malloc(sizeof(pthread_t) * 1);
-	init_philos(controller);
-
-	if (pthread_create(&controller->tid[0], NULL, &routine_solo, &controller->philos[0]) != 0)
-	{
-		printf("exited from the routine process!\n");
-		exit(1);
-	}
-
-	pthread_join(controller->tid[0], NULL);
-
-	// free(&controller->philos[0]);
-	// free(&controller->tid[0]);
-
-	// free(controller->philos);
-	// free(controller->tid);
-
-	free_exit(controller);
-	return ;
 }
 
 int main(int ac, char **av)
@@ -206,19 +111,21 @@ int main(int ac, char **av)
 
 	if (ac < 5 || ac > 6)
 		return (printf("wrong arguments number\n"));
-
 	if (arg_parser(av) != 0)
 		return (printf("bad argument formatting\n"));
-
 	if (controller_init(&controller, av) != 0)
 		return (printf("bad time input\n"));
-
 	if (controller.num_of_philos == 1)
+	{
 		case_one(&controller);
-	// else
-	// 	init_multiple(&controller);
+		return (0);
+	}
 
 	init_philos(&controller);
+	
+	free(controller.philos);
+	free(controller.tid);
+	free(controller.forks);
 
 	return (0);
 }

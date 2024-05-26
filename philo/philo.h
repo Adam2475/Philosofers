@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/21 18:35:00 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:36:19 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,16 @@
 
 typedef struct s_philo
 {
-	int					id;
-	pthread_t			api_data;
-	size_t				last_meal;
-	pthread_mutex_t		*fork_l;
-	pthread_mutex_t 	*fork_r;
-	size_t				time_to_die;
-	size_t				time_to_eat;
-	size_t				time_to_sleep;
-	bool				dead_flag;
-	// int					meals_num;
-	int					target_meals;
-	// t_controller	*controller;
+	int						id;
+	pthread_t				supervisor_id;
+	size_t					last_meal;
+	pthread_mutex_t			*fork_l;
+	pthread_mutex_t 		*fork_r;
+	size_t					time_to_die;
+	size_t					time_to_eat;
+	size_t					time_to_sleep;
+	bool					dead_flag;
+	int						target_meals;
 	struct	s_controller	*controller;
 }	t_philo;
 
@@ -51,8 +49,8 @@ typedef struct s_controller
 	int				n_times_to_eat;
 	uint64_t		start_time;
 	t_philo			*philos;
-	// pthread_mutex_t	*write_lock;
-	// pthread_mutex_t	*dead_lock;
+	pthread_mutex_t	*write_lock;
+	//pthread_mutex_t	*dead_lock;
 	// pthread_mutex_t	*meal_lock;
 }	t_controller;
 
@@ -67,8 +65,12 @@ void		*routine(void *philo_pointer);
 int			init_routine(t_controller *controller);
 void		distribute_forks(t_controller *controller);
 char		*ft_itoa(int n);
-void		philo_eat(t_philo *philo);
+void		case_one(t_controller *controller);
+void		ft_init_mutex(t_controller *controller);
+void		init_forks(t_controller *controller);
 // Actions
 void		philo_die(t_philo *philo);
+void		philo_eat(t_philo *philo);
+void		philo_print(t_philo *philo, int unlock);
 
 #endif

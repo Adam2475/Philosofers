@@ -5,7 +5,7 @@ CC = cc
 CFLAGS = -pthread -Wall -Wextra -Werror
 
 SRC = main.c parsing.c utils.c init.c \
-		itoa.c actions.c \
+		itoa.c actions.c case_one.c \
 
 OBJ = $(SRC:.c=.o)
 

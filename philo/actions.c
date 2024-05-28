@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:33:50 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/26 20:47:58 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:30:30 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void    philo_eat(t_philo *philo)
 	timestamp = ft_itoa(get_time() - philo->controller->start_time);
 	philo_print(philo, 1);
 	ft_usleep(philo->time_to_eat);
-	philo->last_meal = (size_t)timestamp;
+	philo->last_meal = get_time() - philo->controller->start_time;
+	printf("philo: %d meal-time: %lums\n", philo->id, philo->last_meal);
+	philo->meal_num += 1;
+	printf("philo %d meal number: %d\n",philo->id, philo->meal_num);
 }
 
 void    philo_sleep()

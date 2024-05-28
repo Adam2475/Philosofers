@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/26 20:36:19 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:25:16 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_philo
 	size_t					time_to_die;
 	size_t					time_to_eat;
 	size_t					time_to_sleep;
+	int						meal_num;
 	bool					dead_flag;
 	int						target_meals;
 	struct	s_controller	*controller;

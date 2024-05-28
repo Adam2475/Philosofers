@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/26 20:52:29 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:32:43 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,8 @@ void	distribute_forks(t_controller *controller)
 		if (i == 0)
 			controller->philos[i].fork_r = &controller->forks[controller->num_of_philos - 1];
 		else
-		{
 			controller->philos[i].fork_r = &controller->forks[i - 1];
-		}
+
 		controller->philos[i].fork_l = &controller->forks[i];
 		i++;
 	}
@@ -50,10 +49,7 @@ void	init_philos(t_controller *controller)
 		controller->philos[i].controller = controller;
 
 		controller->philos[i].last_meal = get_time() - controller->start_time;
-		//controller->start_time = get_time();
-		//controller->philos[i]->controller->start_time = controller->start_time;
-		//printf("%lu\n", controller->start_time);
-		//printf("%lu\n", controller->philos[i].controller->start_time);
+		controller->philos[i].meal_num = 0;
 		i++;
 	}
 	if (controller->num_of_philos != 1)
@@ -72,12 +68,15 @@ void	*supervisor(void *philo_pointer)
 	philo = (t_philo *)philo_pointer;
 	while (philo->controller->dead_flag == false)
 	{
-		if (philo->last_meal >= philo->time_to_die)
+		if (get_time() - philo->controller->start_time - philo->last_meal >= philo->time_to_die)
 		{
-			//printf("%lu\n", philo->time_to_die);
-			printf("%lu\n", (philo->last_meal));
-			printf("%lu\n", (get_time() - philo->controller->start_time));
+			printf("a philo died!\n");
 			philo->controller->dead_flag = true;
+		}
+		if (philo->meal_num > philo->controller->n_times_to_eat)
+		{
+			printf("win");
+			exit(1);
 		}
 	}
 	return (NULL);
@@ -98,7 +97,15 @@ void	*routine(void *philo_pointer)
 			printf("ciao dal programma");
 			exit(1);
 		}
-		philo_eat(philo);
+		if (philo->id % 2 == 1)
+		{
+			philo_eat(philo);
+		}
+		ft_usleep(philo->time_to_eat);
+		if (philo->id % 2 == 0)
+		{
+			philo_eat(philo);
+		}
 	}
 	if (pthread_join(philo->supervisor_id, NULL))
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:30:44 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/26 20:40:48 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:16:42 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,6 @@ int	init_routine(t_controller *controller)
 			printf("error in initializing routine!\n");
 			return (1);
 		}
-		//controller->philos[i].controller->start_time = controller->start_time;
-		//controller->philos[i].last_meal = controller->start_time;
-		//printf("%lu\n", controller->philos[i].last_meal);
-		//printf("%lu\n", controller->philos[i].controller->start_time);
 		i++;
 	}
 	j = i;

@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/28 18:32:43 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:10:27 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,22 @@ void	*supervisor(void *philo_pointer)
 	philo = (t_philo *)philo_pointer;
 	while (philo->controller->dead_flag == false)
 	{
-		if (get_time() - philo->controller->start_time - philo->last_meal >= philo->time_to_die)
+		if (philo->eating_flag != true)
 		{
-			printf("a philo died!\n");
-			philo->controller->dead_flag = true;
+			if (get_time() - philo->controller->start_time - philo->last_meal >= philo->time_to_die)
+			{
+				philo_die(philo);
+				philo->controller->dead_flag = true;
+			}
 		}
-		if (philo->meal_num > philo->controller->n_times_to_eat)
+		if (philo->controller->n_times_to_eat != -1)
 		{
-			printf("win");
-			exit(1);
+			if (philo->meal_num > philo->controller->n_times_to_eat)
+			{
+				printf("win");
+				philo->controller->win_flag = true;
+				return (NULL);
+			}
 		}
 	}
 	return (NULL);
@@ -89,21 +96,26 @@ void	*routine(void *philo_pointer)
 	philo = (t_philo *)philo_pointer;
 	if (pthread_create(&philo->supervisor_id, NULL, &supervisor, (void *)philo) != 0)
 	 	return (NULL);
-	while (philo->controller->dead_flag != true)
+	while (philo->controller->dead_flag != true || philo->controller->win_flag != true)
 	{
 		if (philo->controller->dead_flag == true)
 		{
 			philo_die(philo);
-			printf("ciao dal programma");
 			exit(1);
+		}
+		if (philo->controller->win_flag == true)
+		{
+			printf("win");
+			return (NULL);
 		}
 		if (philo->id % 2 == 1)
 		{
 			philo_eat(philo);
+			philo_sleep(philo);
 		}
-		ft_usleep(philo->time_to_eat);
 		if (philo->id % 2 == 0)
 		{
+			philo_sleep(philo);
 			philo_eat(philo);
 		}
 	}

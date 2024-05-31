@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/28 18:25:16 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:12:01 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_philo
 	size_t					time_to_die;
 	size_t					time_to_eat;
 	size_t					time_to_sleep;
+	bool					eating_flag;
 	int						meal_num;
 	bool					dead_flag;
 	int						target_meals;
@@ -40,18 +41,19 @@ typedef struct s_philo
 
 typedef struct s_controller
 {
-	pthread_t		*tid;
-	pthread_mutex_t *forks;
-	bool			dead_flag;
-	int				num_of_philos;
-	size_t			time_to_die;
-	size_t			time_to_eat;
-	size_t			time_to_sleep;
-	int				n_times_to_eat;
-	uint64_t		start_time;
-	t_philo			*philos;
-	pthread_mutex_t	*write_lock;
-	//pthread_mutex_t	*dead_lock;
+	pthread_t			*tid;
+	pthread_mutex_t 	*forks;
+	bool				dead_flag;
+	int					num_of_philos;
+	size_t				time_to_die;
+	size_t				time_to_eat;
+	size_t				time_to_sleep;
+	int					n_times_to_eat;
+	uint64_t			start_time;
+	t_philo				*philos;
+	bool				win_flag;
+	pthread_mutex_t		write_lock;
+	pthread_mutex_t		dead_lock;
 	// pthread_mutex_t	*meal_lock;
 }	t_controller;
 
@@ -73,5 +75,6 @@ void		init_forks(t_controller *controller);
 void		philo_die(t_philo *philo);
 void		philo_eat(t_philo *philo);
 void		philo_print(t_philo *philo, int unlock);
+void		philo_sleep(t_philo *philo);
 
 #endif

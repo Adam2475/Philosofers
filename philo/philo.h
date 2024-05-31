@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/31 19:12:01 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:24:21 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,6 @@ void		philo_die(t_philo *philo);
 void		philo_eat(t_philo *philo);
 void		philo_print(t_philo *philo, int unlock);
 void		philo_sleep(t_philo *philo);
+void		philo_think(t_philo *philo);
 
 #endif

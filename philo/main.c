@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/31 19:10:27 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/05/31 19:41:52 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	*supervisor(void *philo_pointer)
 		{
 			if (philo->meal_num > philo->controller->n_times_to_eat)
 			{
-				printf("win");
 				philo->controller->win_flag = true;
 				return (NULL);
 			}
@@ -103,20 +102,22 @@ void	*routine(void *philo_pointer)
 			philo_die(philo);
 			exit(1);
 		}
-		if (philo->controller->win_flag == true)
-		{
-			printf("win");
-			return (NULL);
-		}
 		if (philo->id % 2 == 1)
 		{
 			philo_eat(philo);
 			philo_sleep(philo);
+			philo_think(philo);
 		}
 		if (philo->id % 2 == 0)
 		{
-			philo_sleep(philo);
 			philo_eat(philo);
+			philo_sleep(philo);
+			philo_think(philo);
+		}
+		if (philo->controller->win_flag == true)
+		{
+			//printf("%d win\n", philo->id);
+			return (NULL);
 		}
 	}
 	if (pthread_join(philo->supervisor_id, NULL))

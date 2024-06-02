@@ -2,10 +2,10 @@ NAME = philo
 
 CC = cc
 
-CFLAGS = -pthread -Wall -Wextra -Werror
+CFLAGS = -pthread -Wall -Wextra -Werror -g
 
 SRC = main.c parsing.c utils.c init.c \
-		itoa.c actions.c case_one.c \
+		utils2.c actions.c case_one.c \
 
 OBJ = $(SRC:.c=.o)
 

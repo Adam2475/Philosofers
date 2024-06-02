@@ -6,48 +6,38 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:58:01 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/26 15:51:50 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/02 15:55:51 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-// static	void	free_exit(t_controller *controller)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < controller->num_of_philos)
-// 	{
-// 		// free(&controller->philos[i]);
-// 		// free(&controller->tid[i]);
-// 		free(&controller->philos[i]);
-// 		pthread_mutex_destroy(&controller->forks[i]);
-// 		free(&controller->tid[i]);
-// 		i++;
-// 		printf("%d\n", i);
-// 	}
-	
-// 	// free(controller->tid);
-// 	//free(controller->forks);
-	
-// 	return ;
-// }
+void	free_exit(t_controller *controller)
+{
+	if (controller->philos)
+		free(controller->philos);
+	if (controller->tid)
+		free(controller->tid);
+	if (controller->philos)
+		free(controller->forks);
+}
 
 static	void	*routine_solo(void *philo_pointer)
 {
-	t_philo	*philo;
+	t_philo		*philo;
+	char		*timestamp;
 
 	philo = (t_philo *)philo_pointer;
 	while (philo->controller->dead_flag == false)
 	{
 		if (get_time() - philo->controller->start_time >= philo->controller->time_to_die)
 		{
-			philo_die(philo);
+			timestamp = ft_itoa(get_time() - philo->controller->start_time);
+			printf("%sms, philo %d: has died!\n", timestamp, philo->id);
 			philo->controller->dead_flag = true;
+			free(timestamp);
 			return (NULL);
 		}
-		ft_usleep(1);
 	}
 	return (NULL);
 }
@@ -67,7 +57,7 @@ void	init_philo(t_controller *controller)
 	printf("%lums philo %d: has taken a fork\n", (get_time() - controller->start_time), controller->philos[0].id);
 }
 
-void	case_one(t_controller *controller)
+int	case_one(t_controller *controller)
 {
 	controller->start_time = get_time();
 	init_philo(controller);
@@ -79,5 +69,5 @@ void	case_one(t_controller *controller)
 	pthread_join(controller->tid[0], NULL);
 	free(&controller->philos[0]);
 	free(controller->tid);
-	return ;
+	return (0);
 }

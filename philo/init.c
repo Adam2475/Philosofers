@@ -6,20 +6,35 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:30:44 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/31 19:11:08 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/02 15:58:17 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ft_usleep(__useconds_t time)
+void	init_philos(t_controller *controller)
 {
-	uint64_t	start;
+	int	i;
+	controller->philos = (t_philo *)malloc(sizeof(t_philo) * controller->num_of_philos);
+	controller->tid = (pthread_t *)malloc(sizeof(pthread_t) * controller->num_of_philos);
 
-	start = get_time();
-	while ((get_time() - start) < time)
-		usleep(time / 10);
-	return (0);
+	i = 0;
+	init_forks(controller);
+	while (i < controller->num_of_philos)
+	{
+		controller->philos[i].time_to_die = controller->time_to_die;
+		controller->philos[i].time_to_eat = controller->time_to_eat;
+		controller->philos[i].time_to_sleep = controller->time_to_sleep;
+		controller->philos[i].dead_flag = false;
+		controller->philos[i].target_meals = controller->n_times_to_eat;
+		controller->philos[i].id = i + 1;
+		controller->philos[i].controller = controller;
+		controller->philos[i].last_meal = get_time() - controller->start_time;
+		controller->philos[i].meal_num = 0;
+		controller->philos[i].controller->exit_flag = false;
+		i++;
+	}
+	distribute_forks(controller);
 }
 
 int	controller_init(t_controller *elem, char **av)
@@ -55,13 +70,13 @@ int	init_routine(t_controller *controller)
 			printf("error in initializing routine!\n");
 			return (1);
 		}
+		ft_usleep(1);
 		i++;
 	}
 	j = i;
 	while (j > 0)
 	{
 		j--;
-		ft_usleep(1);
 		pthread_join(controller->tid[j], NULL);
 	}
 	return (0);
@@ -75,6 +90,10 @@ void	ft_init_mutex(t_controller *controller)
 	if (pthread_mutex_init(&controller->write_lock, NULL) != 0)
 		exit(1);
 	if (pthread_mutex_init(&controller->dead_lock, NULL) != 0)
+		exit(1);
+	if (pthread_mutex_init(&controller->lock, NULL) != 0)
+		exit(1);
+	if (pthread_mutex_init(&controller->meal_lock, NULL) != 0)
 		exit(1);
 	while (i < controller->num_of_philos)
 	{

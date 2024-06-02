@@ -1,16 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   itoa.c                                             :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/18 19:29:43 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/18 19:29:44 by adapassa         ###   ########.fr       */
+/*   Created: 2024/06/02 15:58:40 by adapassa          #+#    #+#             */
+/*   Updated: 2024/06/02 15:59:16 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	ft_usleep(__useconds_t time)
+{
+	uint64_t	start;
+
+	start = get_time();
+	while ((get_time() - start) < time)
+		usleep(time / 10);
+	return (0);
+}
 
 static size_t	get_digits(int n)
 {

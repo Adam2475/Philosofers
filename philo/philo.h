@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/31 19:24:21 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/02 16:00:28 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,11 @@ typedef struct s_controller
 	uint64_t			start_time;
 	t_philo				*philos;
 	bool				win_flag;
+	bool				exit_flag;
 	pthread_mutex_t		write_lock;
 	pthread_mutex_t		dead_lock;
-	// pthread_mutex_t	*meal_lock;
+	pthread_mutex_t		meal_lock;
+	pthread_mutex_t		lock;
 }	t_controller;
 
 int			arg_parser(char **av);
@@ -68,14 +70,18 @@ void		*routine(void *philo_pointer);
 int			init_routine(t_controller *controller);
 void		distribute_forks(t_controller *controller);
 char		*ft_itoa(int n);
-void		case_one(t_controller *controller);
+int			case_one(t_controller *controller);
 void		ft_init_mutex(t_controller *controller);
 void		init_forks(t_controller *controller);
+void		free_exit(t_controller *controller);
+void		init_philos(t_controller *controller);
 // Actions
 void		philo_die(t_philo *philo);
 void		philo_eat(t_philo *philo);
 void		philo_print(t_philo *philo, int unlock);
 void		philo_sleep(t_philo *philo);
 void		philo_think(t_philo *philo);
+// Controls
+int			check_death(t_philo *philo, int nb);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 11:29:31 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/02 16:18:22 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/09 19:00:53 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 int	check_death(t_philo *philo, int nb)
 {
 	pthread_mutex_lock(&philo->controller->dead_lock);
+	//printf("last meal: %lu\n, ", get_time() - philo->last_meal);
 	if (nb)
 		philo->controller->exit_flag = true;
 	if (philo->controller->exit_flag)
 	{
+		philo_die(philo);
 		pthread_mutex_unlock(&philo->controller->dead_lock);
 		return (1);
 	}

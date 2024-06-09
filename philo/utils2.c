@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 15:58:40 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/02 15:59:16 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/09 18:47:33 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,32 @@ char			*ft_itoa(int n)
 	if (n < 0)
 		*(str_num + 0) = '-';
 	return (str_num);
+}
+
+void	die_eating(t_philo *philo)
+{
+	char	*timestamp;
+
+	pthread_mutex_lock(&philo->controller->write_lock);
+
+	timestamp = ft_itoa( get_time() - philo->controller->start_time + (philo->time_to_die - philo->time_to_eat));
+	printf("%sms, philo %d: couldn't finish eating!\n", timestamp, philo->id);
+	free(timestamp);
+	exit(1);
+	pthread_mutex_unlock(&philo->controller->write_lock);
+}
+
+int	eat_time_setter(t_philo *philo, long unsigned start)
+{
+	pthread_mutex_lock(&philo->controller->meal_lock);
+	(void)start;
+	// if (get_time() - philo->last_meal + philo->time_to_eat >= philo->time_to_die)
+	// {
+	// 	die_eating(philo);
+	// 	pthread_mutex_unlock(&philo->controller->meal_lock);
+	// 	return (1);
+	// }
+	philo->last_meal = get_time();
+	pthread_mutex_unlock(&philo->controller->meal_lock);
+	return (0);
 }

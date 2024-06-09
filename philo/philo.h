@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/02 16:00:28 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/09 19:08:15 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ typedef struct s_philo
 	size_t					time_to_die;
 	size_t					time_to_eat;
 	size_t					time_to_sleep;
-	bool					eating_flag;
 	int						meal_num;
 	bool					dead_flag;
 	int						target_meals;
@@ -57,6 +56,7 @@ typedef struct s_controller
 	pthread_mutex_t		dead_lock;
 	pthread_mutex_t		meal_lock;
 	pthread_mutex_t		lock;
+	pthread_mutex_t		timeout_lock;
 }	t_controller;
 
 int			arg_parser(char **av);
@@ -81,7 +81,11 @@ void		philo_eat(t_philo *philo);
 void		philo_print(t_philo *philo, int unlock);
 void		philo_sleep(t_philo *philo);
 void		philo_think(t_philo *philo);
+void		die_eating(t_philo *philo);
 // Controls
 int			check_death(t_philo *philo, int nb);
+int			eat_time_setter(t_philo *philo, long unsigned start);
+void		forks_down(t_philo *philo);
+void		take_forks(t_philo *philo);
 
 #endif

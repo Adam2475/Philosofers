@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:30:44 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/02 15:58:17 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/06 19:15:27 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	init_philos(t_controller *controller)
 		controller->philos[i].target_meals = controller->n_times_to_eat;
 		controller->philos[i].id = i + 1;
 		controller->philos[i].controller = controller;
-		controller->philos[i].last_meal = get_time() - controller->start_time;
+		controller->philos[i].last_meal = controller->start_time;
 		controller->philos[i].meal_num = 0;
 		controller->philos[i].controller->exit_flag = false;
 		i++;

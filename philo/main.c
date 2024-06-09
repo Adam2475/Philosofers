@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/02 16:27:48 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/09 19:06:42 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,30 +30,26 @@ void	distribute_forks(t_controller *controller)
 	init_routine(controller);
 }
 
-
-
 void	*supervisor(void *philo_pointer)
 {
 	t_philo *philo;
 
 	philo = (t_philo *)philo_pointer;
-	pthread_mutex_lock(&philo->controller->meal_lock);
-	pthread_mutex_lock(&philo->controller->lock);
-	if (check_death(philo, 0) != 0 || get_time() - philo->controller->start_time - philo->last_meal >= philo->time_to_die)
+	while (1)
 	{
+		pthread_mutex_lock(&philo->controller->meal_lock);
+		pthread_mutex_lock(&philo->controller->lock);
+		if (check_death(philo, 0) != 0 || get_time() - philo->last_meal >= philo->time_to_die)
+		{
+			pthread_mutex_unlock(&philo->controller->meal_lock);
+			pthread_mutex_unlock(&philo->controller->dead_lock);
+			philo_die(philo);
+			philo->controller->exit_flag = true;
+		}
 		pthread_mutex_unlock(&philo->controller->meal_lock);
-		pthread_mutex_unlock(&philo->controller->dead_lock);
-		philo_die(philo);
-		philo->controller->win_flag = true;
-		exit(1);
+		pthread_mutex_unlock(&philo->controller->lock);
+		ft_usleep(1);
 	}
-	// if (1)
-	// {
-	// 	printf("%d\n", philo->controller->n_times_to_eat);
-	// 	printf("%d\n", philo->controller->);
-	// }
-	pthread_mutex_unlock(&philo->controller->meal_lock);
-	pthread_mutex_unlock(&philo->controller->lock);
 	return (NULL);
 }
 
@@ -64,15 +60,19 @@ void	*routine(void *philo_pointer)
 
 	i = 1;
 	philo = (t_philo *)philo_pointer;
+	philo->last_meal = philo->controller->start_time;
 	if (pthread_create(&philo->supervisor_id, NULL, &supervisor, (void *)philo) != 0)
 	 	return (NULL);
 	while (check_death(philo, 0) != true)
 	{
+		//printf("last meal: %lu\n, ", get_time() - philo->last_meal);
+		if (check_death(philo, 0))
+			exit(1);
 		philo_eat(philo);
 		philo_sleep(philo);
 		philo_think(philo);
-		if (i >= philo->controller->n_times_to_eat)
-			break;
+		if (i >= philo->controller->n_times_to_eat && philo->controller->n_times_to_eat > 0)
+			exit(1);
 		i++;
 	}
 	if (pthread_join(philo->supervisor_id, NULL))
@@ -92,6 +92,7 @@ int main(int ac, char **av)
 		return (printf("bad time input\n"));
 	if (controller.num_of_philos == 1)
 		return (case_one(&controller));
+	//printf("ciao");
 	init_philos(&controller);
 	free_exit(&controller);
 	return (0);

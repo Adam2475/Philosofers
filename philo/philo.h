@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/09 19:08:15 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/09 20:01:10 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ int			case_one(t_controller *controller);
 void		ft_init_mutex(t_controller *controller);
 void		init_forks(t_controller *controller);
 void		free_exit(t_controller *controller);
+void		free_exit_multi(t_controller *data);
 void		init_philos(t_controller *controller);
 // Actions
 void		philo_die(t_philo *philo);
@@ -81,10 +82,10 @@ void		philo_eat(t_philo *philo);
 void		philo_print(t_philo *philo, int unlock);
 void		philo_sleep(t_philo *philo);
 void		philo_think(t_philo *philo);
-void		die_eating(t_philo *philo);
+//void		die_eating(t_philo *philo);
 // Controls
 int			check_death(t_philo *philo, int nb);
-int			eat_time_setter(t_philo *philo, long unsigned start);
+int			eat_time_setter(t_philo *philo);
 void		forks_down(t_philo *philo);
 void		take_forks(t_philo *philo);
 

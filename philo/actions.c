@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:33:50 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/09 18:58:50 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/09 20:01:58 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,15 @@
 
 void	philo_eat(t_philo *philo)
 {
-	long unsigned end_time;
-	long unsigned start;
-
-	start = get_time();
-	end_time = philo->controller->start_time + philo->time_to_die;
+ 	//pthread_mutex_lock(&philo->controller->lock);
 	take_forks(philo);
 	philo_print(philo, 2);
 	philo_print(philo, 2);
 	philo_print(philo, 1);
-	// if (eat_time_setter(philo, start) != 0)
-	// {
-	// 	philo->controller->exit_flag = true;
-	// 	exit(3);
-	// }
-	eat_time_setter(philo, start);
+	eat_time_setter(philo);
+	//pthread_mutex_lock(&philo->controller->dead_lock);
 	ft_usleep(philo->time_to_eat);
+	//pthread_mutex_unlock(&philo->controller->dead_lock);
 	philo->meal_num += 1;
 	forks_down(philo);
 }
@@ -61,7 +54,8 @@ void	philo_die(t_philo *philo)
 	philo->controller->dead_flag = true;
 	free(timestamp);
 	pthread_mutex_unlock(&philo->controller->write_lock);
-	exit(1);
+	//forks_down(philo);
+	free_exit_multi(philo->controller);
 }
 
 void	philo_print(t_philo *philo, int unlock)

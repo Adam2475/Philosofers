@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/09 19:06:42 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/09 20:10:17 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,14 @@ void	*supervisor(void *philo_pointer)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->controller->meal_lock);
-		pthread_mutex_lock(&philo->controller->lock);
 		if (check_death(philo, 0) != 0 || get_time() - philo->last_meal >= philo->time_to_die)
 		{
+			forks_down(philo);
 			pthread_mutex_unlock(&philo->controller->meal_lock);
-			pthread_mutex_unlock(&philo->controller->dead_lock);
 			philo_die(philo);
 			philo->controller->exit_flag = true;
 		}
 		pthread_mutex_unlock(&philo->controller->meal_lock);
-		pthread_mutex_unlock(&philo->controller->lock);
 		ft_usleep(1);
 	}
 	return (NULL);
@@ -65,8 +63,7 @@ void	*routine(void *philo_pointer)
 	 	return (NULL);
 	while (check_death(philo, 0) != true)
 	{
-		//printf("last meal: %lu\n, ", get_time() - philo->last_meal);
-		if (check_death(philo, 0))
+		if (check_death(philo, 0) != 0)
 			exit(1);
 		philo_eat(philo);
 		philo_sleep(philo);
@@ -92,8 +89,7 @@ int main(int ac, char **av)
 		return (printf("bad time input\n"));
 	if (controller.num_of_philos == 1)
 		return (case_one(&controller));
-	//printf("ciao");
 	init_philos(&controller);
-	free_exit(&controller);
+	free_exit_multi(&controller);
 	return (0);
 }

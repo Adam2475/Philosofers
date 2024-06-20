@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:12:05 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/09 20:03:20 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:33:35 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ void	free_exit_multi(t_controller *data)
 		free(data->tid);
 	if (data->philos)
 		free(data->forks);
-	while (++i < data->num_of_philos)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		pthread_mutex_destroy(data->philos[i].fork_l);
-		pthread_mutex_destroy(data->philos[i].fork_r);
+	// while (++i < data->num_of_philos)
+	// {
+	// 	pthread_mutex_destroy(&data->forks[i]);
+	// 	//pthread_mutex_destroy(data->philos[i].fork_l);
+	// 	//pthread_mutex_destroy(data->philos[i].fork_r);
 
-	}
+	// }
 	pthread_mutex_destroy(&data->write_lock);
 	pthread_mutex_destroy(&data->lock);
 	//clear_data(data);

@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:57:29 by adapassa          #+#    #+#             */
-/*   Updated: 2024/05/15 17:37:56 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:18:37 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ static int	ft_isdigit(int c)
 
 int str_is_digit(const char *str)
 {
+	if (str && *str == '+')
+		str++;
 	while (*str)
 	{
 		if (ft_isdigit(*str) != 1)

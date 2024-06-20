@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:33:50 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/09 20:01:58 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:38:13 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	philo_eat(t_philo *philo)
 {
  	//pthread_mutex_lock(&philo->controller->lock);
+	//pthread_mutex_lock(&philo->controller->lock);
 	take_forks(philo);
+	//pthread_mutex_unlock(&philo->controller->lock);
 	philo_print(philo, 2);
 	philo_print(philo, 2);
 	philo_print(philo, 1);
@@ -54,8 +56,6 @@ void	philo_die(t_philo *philo)
 	philo->controller->dead_flag = true;
 	free(timestamp);
 	pthread_mutex_unlock(&philo->controller->write_lock);
-	//forks_down(philo);
-	free_exit_multi(philo->controller);
 }
 
 void	philo_print(t_philo *philo, int unlock)
@@ -81,4 +81,5 @@ void	philo_print(t_philo *philo, int unlock)
 		printf("%sms, philo %d: is sleeping!\n", timestamp, philo->id);
 		pthread_mutex_unlock(&philo->controller->write_lock);
 	}
+	free(timestamp);
 }

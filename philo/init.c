@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:30:44 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/20 16:07:53 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/24 08:31:05 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ void	init_philos(t_controller *controller)
 		i++;
 	}
 	distribute_forks(controller);
+	// while (i >= 0)
+	// {
+	// 	free(&controller->tid[i]);
+	// 	//pthread_mutex_destroy(&controller->forks[i]);
+	// 	i--;
+	// }
 }
 
 int	controller_init(t_controller *elem, char **av)
@@ -78,6 +84,7 @@ int	init_routine(t_controller *controller)
 	{
 		j--;
 		pthread_join(controller->tid[j], NULL);
+		//pthread_detach(controller->tid[j]);
 	}
 	//printf("triggering the threads join!!");
 	free_exit_multi(controller);

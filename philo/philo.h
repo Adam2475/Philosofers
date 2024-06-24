@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/09 20:01:10 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/24 10:15:46 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void		free_exit_multi(t_controller *data);
 void		init_philos(t_controller *controller);
 // Actions
 void		philo_die(t_philo *philo);
-void		philo_eat(t_philo *philo);
+int			philo_eat(t_philo *philo);
 void		philo_print(t_philo *philo, int unlock);
 void		philo_sleep(t_philo *philo);
 void		philo_think(t_philo *philo);

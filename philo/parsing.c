@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 11:29:31 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/09 19:16:27 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:19:37 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,17 @@
 
 int	check_death(t_philo *philo, int nb)
 {
-	pthread_mutex_lock(&philo->controller->dead_lock);
+	pthread_mutex_lock(&philo->controller->ultimate_lock);
 	if (nb)
 		philo->controller->exit_flag = true;
 	if (philo->controller->exit_flag)
 	{
+		pthread_mutex_unlock(&philo->controller->ultimate_lock);
 		philo_die(philo);
-		pthread_mutex_unlock(&philo->controller->dead_lock);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->controller->dead_lock);
+	else
+		pthread_mutex_unlock(&philo->controller->ultimate_lock);
 	return (0);
 }
 

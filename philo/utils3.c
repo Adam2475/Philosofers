@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:12:05 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/24 08:40:04 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/25 11:17:39 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,28 +51,37 @@ void	free_exit_multi(t_controller *data)
 		free(data->tid);
 	if (data->philos)
 		free(data->forks);
-	// while (++i < data->num_of_philos)
-	// {
-	// 	pthread_mutex_destroy(&data->forks[i]);
-	// 	//pthread_mutex_destroy(data->philos[i].fork_l);
-	// 	//pthread_mutex_destroy(data->philos[i].fork_r);
 
-	// }
-	// while (i < data->num_of_philos)
-	// {
-	// 	free(data->tid[i]);
-	// 	//free(data->philos[i]);
-	// 	//pthread_mutex_destroy(&controller->forks[i]);
-	// 	i++;
-	// }
-	// while (i < data->num_of_philos)
-	// {
-	// 	//pthread_detach(data->tid[i]);
-	// 	//pthread_detach(controller->tid[j]);
-	// 	i++;
-	// }
 	pthread_mutex_destroy(&data->write_lock);
+	
+	//pthread_mutex_lock(&data->ultimate_lock);
 	pthread_mutex_destroy(&data->lock);
-	//clear_data(data);
+	//pthread_mutex_unlock(&data->ultimate_lock);
+
+	pthread_mutex_destroy(&data->ultimate_lock);
+
 	exit(0);
+}
+
+void	distribute_forks(t_controller *controller)
+{
+	int	i;
+
+	i = 0;
+	while (i < controller->num_of_philos)
+	{
+		if (i == 0)
+			controller->philos[i].fork_r = &controller->forks[controller->num_of_philos - 1];
+		else
+			controller->philos[i].fork_r = &controller->forks[i - 1];
+
+		controller->philos[i].fork_l = &controller->forks[i];
+		i++;
+	}
+	init_routine(controller);
+	while (i > 0)
+	{
+		free(&controller->tid[i]);
+		i--;
+	}
 }

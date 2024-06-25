@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:30:44 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/24 08:31:05 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:35:27 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,6 @@ void	init_philos(t_controller *controller)
 		i++;
 	}
 	distribute_forks(controller);
-	// while (i >= 0)
-	// {
-	// 	free(&controller->tid[i]);
-	// 	//pthread_mutex_destroy(&controller->forks[i]);
-	// 	i--;
-	// }
 }
 
 int	controller_init(t_controller *elem, char **av)
@@ -50,8 +44,10 @@ int	controller_init(t_controller *elem, char **av)
 	elem->time_to_eat = (size_t)ft_atoi(av[3]);
 	elem->time_to_sleep = (size_t)ft_atoi(av[4]);
 	elem->dead_flag = false;
+	elem->living_flag = false;
 	elem->win_flag = false;
 	elem->start_time = get_time();
+	elem->stop_he_already_dead = false;
 	if (av[5])
 		elem->n_times_to_eat = ft_atoi(av[5]);
 	else
@@ -62,34 +58,6 @@ int	controller_init(t_controller *elem, char **av)
 	return (0);
 }
 
-int	init_routine(t_controller *controller)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (i < controller->num_of_philos)
-	{
-		if (pthread_create(&controller->tid[i], NULL, &routine, &controller->philos[i]) != 0)
-		{
-			printf("error in initializing routine!\n");
-			return (1);
-		}
-		ft_usleep(1);
-		i++;
-	}
-	j = i;
-	while (j > 0)
-	{
-		j--;
-		pthread_join(controller->tid[j], NULL);
-		//pthread_detach(controller->tid[j]);
-	}
-	//printf("triggering the threads join!!");
-	free_exit_multi(controller);
-	return (0);
-}
 
 void	ft_init_mutex(t_controller *controller)
 {
@@ -103,6 +71,8 @@ void	ft_init_mutex(t_controller *controller)
 	if (pthread_mutex_init(&controller->lock, NULL) != 0)
 		exit(1);
 	if (pthread_mutex_init(&controller->meal_lock, NULL) != 0)
+		exit(1);
+	if (pthread_mutex_init(&controller->ultimate_lock, NULL) != 0)
 		exit(1);
 	while (i < controller->num_of_philos)
 	{

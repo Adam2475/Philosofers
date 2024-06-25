@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/24 10:15:46 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:35:10 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_philo
 typedef struct s_controller
 {
 	pthread_t			*tid;
+	pthread_t			supervisor_id;
 	pthread_mutex_t 	*forks;
 	bool				dead_flag;
 	int					num_of_philos;
@@ -52,11 +53,15 @@ typedef struct s_controller
 	t_philo				*philos;
 	bool				win_flag;
 	bool				exit_flag;
+	bool				living_flag;
+	bool				stop_he_already_dead;
 	pthread_mutex_t		write_lock;
 	pthread_mutex_t		dead_lock;
 	pthread_mutex_t		meal_lock;
 	pthread_mutex_t		lock;
 	pthread_mutex_t		timeout_lock;
+	pthread_mutex_t		state_lock;
+	pthread_mutex_t		ultimate_lock;
 }	t_controller;
 
 int			arg_parser(char **av);
@@ -88,5 +93,7 @@ int			check_death(t_philo *philo, int nb);
 int			eat_time_setter(t_philo *philo);
 void		forks_down(t_philo *philo);
 void		take_forks(t_philo *philo);
+void		distribute_forks(t_controller *controller);
+void		*monitoring(void *philo_pointer);
 
 #endif

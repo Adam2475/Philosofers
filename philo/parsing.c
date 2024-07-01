@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 11:29:31 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/25 11:19:37 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/01 19:33:01 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,26 @@
 
 int	check_death(t_philo *philo, int nb)
 {
+	int tmp1[3];
+	
+	pthread_mutex_lock(&philo->controller->dead_lock);
 	pthread_mutex_lock(&philo->controller->ultimate_lock);
 	if (nb)
-		philo->controller->exit_flag = true;
-	if (philo->controller->exit_flag)
+		philo->controller->dead_flag = true;
+	tmp1[0] = philo->controller->stop_he_already_dead;
+	tmp1[1] = philo->controller->dead_flag;
+	tmp1[2] = philo->controller->win_flag;
+	pthread_mutex_unlock(&philo->controller->ultimate_lock);
+	pthread_mutex_unlock(&philo->controller->dead_lock);
+	if (tmp1[1] && !tmp1[2])
 	{
-		pthread_mutex_unlock(&philo->controller->ultimate_lock);
-		philo_die(philo);
-		return (1);
+		if (tmp1[0] != true)
+		{
+			philo_die(philo);
+			//printf("%d\n", philo->controller->stop_he_already_dead);
+			return (1);
+		}
 	}
-	else
-		pthread_mutex_unlock(&philo->controller->ultimate_lock);
 	return (0);
 }
 

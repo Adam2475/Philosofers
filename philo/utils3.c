@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:12:05 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/25 11:17:39 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/01 14:41:47 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,8 @@ void	free_exit_multi(t_controller *data)
 		free(data->tid);
 	if (data->philos)
 		free(data->forks);
-
 	pthread_mutex_destroy(&data->write_lock);
-	
-	//pthread_mutex_lock(&data->ultimate_lock);
-	pthread_mutex_destroy(&data->lock);
-	//pthread_mutex_unlock(&data->ultimate_lock);
-
 	pthread_mutex_destroy(&data->ultimate_lock);
-
 	exit(0);
 }
 
@@ -79,9 +72,4 @@ void	distribute_forks(t_controller *controller)
 		i++;
 	}
 	init_routine(controller);
-	while (i > 0)
-	{
-		free(&controller->tid[i]);
-		i--;
-	}
 }

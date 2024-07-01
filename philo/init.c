@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:30:44 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/25 10:35:27 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/01 16:42:50 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ void	ft_init_mutex(t_controller *controller)
 	if (pthread_mutex_init(&controller->meal_lock, NULL) != 0)
 		exit(1);
 	if (pthread_mutex_init(&controller->ultimate_lock, NULL) != 0)
+		exit(1);
+	if (pthread_mutex_init(&controller->state_lock, NULL) != 0)
 		exit(1);
 	while (i < controller->num_of_philos)
 	{

@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 11:29:31 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/02 17:44:57 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/02 19:37:29 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,19 @@ int	check_death(t_philo *philo, int nb)
 	int tmp1[3];
 	
 	pthread_mutex_lock(&philo->controller->dead_lock);
-	pthread_mutex_lock(&philo->controller->ultimate_lock);
 	if (nb)
 		philo->controller->dead_flag = true;
-	tmp1[0] = philo->controller->stop_he_already_dead;
 	tmp1[1] = philo->controller->dead_flag;
+	pthread_mutex_unlock(&philo->controller->dead_lock);
+
+	pthread_mutex_lock(&philo->controller->ultimate_lock);
 	tmp1[2] = philo->controller->win_flag;
 	pthread_mutex_unlock(&philo->controller->ultimate_lock);
-	pthread_mutex_unlock(&philo->controller->dead_lock);
+	pthread_mutex_lock(&philo->controller->ultimate_lock);
+	tmp1[0] = philo->controller->stop_he_already_dead;
+	pthread_mutex_unlock(&philo->controller->ultimate_lock);
+
+	///////////////////////////////////////////////////////////
 	if (tmp1[1] && !tmp1[2])
 	{
 		pthread_mutex_lock(&philo->controller->dead_lock);

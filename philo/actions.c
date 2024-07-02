@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:33:50 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/01 19:17:12 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:12:33 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,16 @@ int	philo_eat(t_philo *philo)
 {
 	int tmp;
 	
+	take_forks(philo);
 	pthread_mutex_lock(&philo->controller->dead_lock);
 	tmp = philo->controller->dead_flag;
-	pthread_mutex_unlock(&philo->controller->dead_lock);
 	if (tmp)
+	{
+		forks_down(philo);
+		pthread_mutex_unlock(&philo->controller->dead_lock);
 		return (1);
-	take_forks(philo);
+	}
+	pthread_mutex_unlock(&philo->controller->dead_lock);
 	philo_print(philo, 2);
 	philo_print(philo, 2);
 	philo_print(philo, 1);

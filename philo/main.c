@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/01 19:36:21 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:12:52 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,9 @@ void	*routine(void *philo_pointer)
 	{
 		if (philo->controller->dead_flag > 0 || philo->controller->win_flag > 0 || philo->controller->exit_flag > 0)
 			break;
-			
 		if ((i <= philo->target_meals || philo->target_meals == -1) && philo->controller->dead_flag == 0)
 		{
-				printf("philo :%d iteration: %d dead_flag: %d\n", philo->id, i,philo->controller->dead_flag);
+				//printf("philo :%d iteration: %d dead_flag: %d\n", philo->id, i,philo->controller->dead_flag);
 				if (philo_eat(philo) != 0)
 					break;
 		}

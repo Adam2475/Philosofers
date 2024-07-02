@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/02 17:12:52 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/02 18:10:13 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	*monitoring(void *philo_pointer)
 			pthread_mutex_lock(&philo->controller->dead_lock);
 			philo->controller->exit_flag = true;
 			pthread_mutex_unlock(&philo->controller->dead_lock);
-			check_death(philo, 1);
+			//check_death(philo, 1);
 			return (NULL);
 		}
 			
@@ -56,22 +56,22 @@ void	*supervisor(void *philo_pointer)
 	{
 		pthread_mutex_lock(&controller->state_lock);
 		pthread_mutex_lock(&controller->dead_lock);
+
 		data[0] = controller->dead_flag;
 		data[1] = controller->win_flag;
 		data[2] = controller->exit_flag;
+
 		pthread_mutex_unlock(&controller->state_lock);
 		pthread_mutex_unlock(&controller->dead_lock);
 
 		if ( data[0] > 0 || data[1] > 0 || data[2])
 		{
-			
 			pthread_mutex_lock(&controller->dead_lock);
 			controller->dead_flag = true;
-			//controller->living_flag = true;
 			pthread_mutex_unlock(&controller->dead_lock);
 			return (NULL);
 		}
-		ft_usleep(2);
+		ft_usleep(1);
 	}
 	return (NULL);
 }

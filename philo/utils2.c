@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/02 15:58:40 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/25 09:04:50 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:28:16 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,21 @@ int	ft_usleep(__useconds_t time)
 	return (0);
 }
 
-static size_t	get_digits(int n)
+static	size_t	get_digits(int n)
 {
 	size_t	i;
 
 	i = 1;
-	while (n /= 10)
+	n = n / 10;
+	while (n > 0)
+	{
 		i++;
+		n = n / 10;
+	}
 	return (i);
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char		*str_num;
 	size_t		digits;
@@ -45,7 +49,8 @@ char			*ft_itoa(int n)
 		num *= -1;
 		digits++;
 	}
-	if (!(str_num = (char *)malloc(sizeof(char) * (digits + 1))))
+	str_num = (char *)malloc(sizeof(char) * (digits + 1));
+	if (!str_num)
 		return (NULL);
 	*(str_num + digits) = 0;
 	while (digits--)

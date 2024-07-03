@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:33:50 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/02 17:12:33 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:21:29 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	philo_eat(t_philo *philo)
 {
-	int tmp;
-	
+	int	tmp;
+
 	take_forks(philo);
 	pthread_mutex_lock(&philo->controller->dead_lock);
 	tmp = philo->controller->dead_flag;
@@ -48,7 +48,7 @@ void	philo_think(t_philo *philo)
 
 	pthread_mutex_lock(&philo->controller->write_lock);
 	timestamp = ft_itoa(get_time() - philo->controller->start_time);
-	printf("%sms philo %d is thinking!\n",timestamp, philo->id);
+	printf("%sms philo %d is thinking!\n", timestamp, philo->id);
 	free(timestamp);
 	pthread_mutex_unlock(&philo->controller->write_lock);
 }
@@ -67,7 +67,6 @@ void	philo_die(t_philo *philo)
 	printf("%sms, philo %d: has died!\n", timestamp, philo->id);
 	free(timestamp);
 	pthread_mutex_unlock(&philo->controller->write_lock);
-
 	pthread_mutex_lock(&philo->controller->ultimate_lock);
 	philo->controller->stop_he_already_dead = true;
 	pthread_mutex_unlock(&philo->controller->ultimate_lock);

@@ -6,6 +6,7 @@ CFLAGS = -pthread -Wall -Wextra -Werror -g
 
 SRC = main.c parsing.c utils.c init.c \
 		utils2.c actions.c case_one.c utils3.c \
+		refactor_utils.c \
 
 OBJ = $(SRC:.c=.o)
 

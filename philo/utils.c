@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:57:29 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/20 15:18:37 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:30:01 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 uint64_t	get_time(void)
 {
-	struct timeval tv;
+	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL))
 		return (printf("error while getting the time!\n"));
@@ -28,7 +28,7 @@ static int	ft_isdigit(int c)
 	return (0);
 }
 
-int str_is_digit(const char *str)
+int	str_is_digit(const char *str)
 {
 	if (str && *str == '+')
 		str++;
@@ -61,8 +61,8 @@ int	ft_strncmp(char *s1, char *s2, size_t n)
 
 int	ft_atoi(const char *str)
 {
-	int	sign;
-	int	i;
+	int			sign;
+	int			i;
 	long int	res;
 
 	i = 0;

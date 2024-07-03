@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:30:44 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/01 16:42:50 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:31:14 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 void	init_philos(t_controller *controller)
 {
 	int	i;
-	controller->philos = (t_philo *)malloc(sizeof(t_philo) * controller->num_of_philos);
-	controller->tid = (pthread_t *)malloc(sizeof(pthread_t) * controller->num_of_philos);
 
+	controller->philos = (t_philo *)malloc(sizeof(t_philo)
+			* controller->num_of_philos);
+	controller->tid = (pthread_t *)malloc(sizeof(pthread_t)
+			* controller->num_of_philos);
 	i = 0;
 	init_forks(controller);
 	while (i < controller->num_of_philos)
@@ -58,7 +60,6 @@ int	controller_init(t_controller *elem, char **av)
 	return (0);
 }
 
-
 void	ft_init_mutex(t_controller *controller)
 {
 	int	i;
@@ -89,6 +90,7 @@ void	ft_init_mutex(t_controller *controller)
 
 void	init_forks(t_controller *controller)
 {
-	controller->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * controller->num_of_philos);
+	controller->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t)
+			* controller->num_of_philos);
 	ft_init_mutex(controller);
 }

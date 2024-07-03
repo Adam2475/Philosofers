@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:58:01 by adapassa          #+#    #+#             */
-/*   Updated: 2024/06/02 15:55:51 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:33:39 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static	void	*routine_solo(void *philo_pointer)
 	philo = (t_philo *)philo_pointer;
 	while (philo->controller->dead_flag == false)
 	{
-		if (get_time() - philo->controller->start_time >= philo->controller->time_to_die)
+		if (get_time() - philo->controller->start_time
+			>= philo->controller->time_to_die)
 		{
 			timestamp = ft_itoa(get_time() - philo->controller->start_time);
 			printf("%sms, philo %d: has died!\n", timestamp, philo->id);
@@ -54,14 +55,16 @@ void	init_philo(t_controller *controller)
 	controller->philos[0].id = 1;
 	controller->philos[0].controller = controller;
 	controller->philos[0].fork_l = &controller->forks[0];
-	printf("%lums philo %d: has taken a fork\n", (get_time() - controller->start_time), controller->philos[0].id);
+	printf("%lums philo %d: has taken a fork\n", (get_time()
+			- controller->start_time), controller->philos[0].id);
 }
 
 int	case_one(t_controller *controller)
 {
 	controller->start_time = get_time();
 	init_philo(controller);
-	if (pthread_create(&controller->tid[0], NULL, &routine_solo, &controller->philos[0]) != 0)
+	if (pthread_create(&controller->tid[0], NULL,
+			&routine_solo, &controller->philos[0]) != 0)
 	{
 		printf("exited from the routine process!\n");
 		exit(1);

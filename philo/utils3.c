@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/03 18:12:05 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/01 14:41:47 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:37:31 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	take_forks(t_philo *philo)
 	{
 		pthread_mutex_lock(philo->fork_l);
 		pthread_mutex_lock(philo->fork_r);
-	} 
-	else 
+	}
+	else
 	{
 		pthread_mutex_lock(philo->fork_r);
 		pthread_mutex_lock(philo->fork_l);
@@ -32,8 +32,8 @@ void	forks_down(t_philo *philo)
 	{
 		pthread_mutex_unlock(philo->fork_r);
 		pthread_mutex_unlock(philo->fork_l);
-	} 
-	else 
+	}
+	else
 	{
 		pthread_mutex_unlock(philo->fork_l);
 		pthread_mutex_unlock(philo->fork_r);
@@ -64,10 +64,10 @@ void	distribute_forks(t_controller *controller)
 	while (i < controller->num_of_philos)
 	{
 		if (i == 0)
-			controller->philos[i].fork_r = &controller->forks[controller->num_of_philos - 1];
+			controller->philos[i].fork_r
+				= &controller->forks[controller->num_of_philos - 1];
 		else
 			controller->philos[i].fork_r = &controller->forks[i - 1];
-
 		controller->philos[i].fork_l = &controller->forks[i];
 		i++;
 	}

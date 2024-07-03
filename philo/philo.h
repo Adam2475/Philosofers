@@ -6,21 +6,21 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:53:53 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/01 16:41:52 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 14:01:07 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <pthread.h>
-#include <stdbool.h>
-#include <sys/time.h>
-#include <stdint.h>
-#include <limits.h>
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <pthread.h>
+# include <stdbool.h>
+# include <sys/time.h>
+# include <stdint.h>
+# include <limits.h>
 
 typedef struct s_philo
 {
@@ -28,21 +28,21 @@ typedef struct s_philo
 	pthread_t				supervisor_id;
 	size_t					last_meal;
 	pthread_mutex_t			*fork_l;
-	pthread_mutex_t 		*fork_r;
+	pthread_mutex_t			*fork_r;
 	size_t					time_to_die;
 	size_t					time_to_eat;
 	size_t					time_to_sleep;
 	int						meal_num;
 	bool					dead_flag;
 	int						target_meals;
-	struct	s_controller	*controller;
+	struct s_controller		*controller;
 }	t_philo;
 
 typedef struct s_controller
 {
 	pthread_t			*tid;
 	pthread_t			supervisor_id;
-	pthread_mutex_t 	*forks;
+	pthread_mutex_t		*forks;
 	bool				dead_flag;
 	int					num_of_philos;
 	size_t				time_to_die;
@@ -95,5 +95,11 @@ void		forks_down(t_philo *philo);
 void		take_forks(t_philo *philo);
 void		distribute_forks(t_controller *controller);
 void		*monitoring(void *philo_pointer);
+//////////////////////////////////////////////
+//Refactoring
+void		philo_sleep_action(t_philo *philo);
+void		philo_think_action(t_philo *philo);
+int			check_break(t_philo *philo);
+int			execute_routine(t_philo *philo, int i);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/02 19:40:49 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:15:01 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	*monitoring(void *philo_pointer)
 		// pthread_mutex_unlock(&philo->controller->meal_lock);
 		// pthread_mutex_lock(&philo->controller->timeout_lock);
 
+		//pthread_mutex_lock(&philo->controller->lock);
 		if (check_death(philo, 0) != 0 || (size_t)tmp >= philo->time_to_die)
 		{
 			//printf("%lu\n", get_time() - philo->last_meal);
@@ -41,6 +42,7 @@ void	*monitoring(void *philo_pointer)
 			//check_death(philo, 1);
 			return (NULL);
 		}
+		//pthread_mutex_unlock(&philo->controller->lock);
 			
 		ft_usleep(1);
 	}
@@ -65,13 +67,16 @@ void	*supervisor(void *philo_pointer)
 		data[1] = controller->win_flag;
 		pthread_mutex_unlock(&controller->ultimate_lock);
 
+		//pthread_mutex_lock(&controller->lock);
 		if ( data[0] > 0 || data[1] > 0 || data[2])
 		{
+			
 			pthread_mutex_lock(&controller->dead_lock);
 			controller->dead_flag = true;
 			pthread_mutex_unlock(&controller->dead_lock);
 			return (NULL);
 		}
+		//pthread_mutex_unlock(&controller->lock);
 		ft_usleep(1);
 	}
 	return (NULL);
@@ -132,10 +137,10 @@ void	*routine(void *philo_pointer)
 		}
 		if ((i <= philo->target_meals || philo->target_meals == -1))
 		{
-			/*pthread_mutex_lock(&philo->controller->dead_lock);
+			pthread_mutex_lock(&philo->controller->dead_lock);
 			int tmp = philo->controller->dead_flag;
-			pthread_mutex_unlock(&philo->controller->dead_lock);*/
-			//if (tmp == 0)
+			pthread_mutex_unlock(&philo->controller->dead_lock);
+			if (tmp == 0)
 				philo_think(philo);
 		}
 		if (i >= philo->controller->n_times_to_eat && philo->controller->n_times_to_eat > 0)

@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 13:38:09 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/03 14:02:48 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:25:27 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,13 @@
 
 void	philo_sleep_action(t_philo *philo)
 {
+	int	tmp;
+
 	pthread_mutex_lock(&philo->controller->dead_lock);
-	if (philo->controller->dead_flag == 0)
-	{
-		pthread_mutex_unlock(&philo->controller->dead_lock);
+	tmp = philo->controller->living_flag;
+	pthread_mutex_unlock(&philo->controller->dead_lock);
+	if (tmp == 0)
 		philo_sleep(philo);
-	}
-	else
-		pthread_mutex_unlock(&philo->controller->dead_lock);
 }
 
 void	philo_think_action(t_philo *philo)
@@ -29,7 +28,7 @@ void	philo_think_action(t_philo *philo)
 	int	tmp;
 
 	pthread_mutex_lock(&philo->controller->dead_lock);
-	tmp = philo->controller->dead_flag;
+	tmp = philo->controller->living_flag;
 	pthread_mutex_unlock(&philo->controller->dead_lock);
 	if (tmp == 0)
 		philo_think(philo);
@@ -63,8 +62,7 @@ int	check_break(t_philo *philo)
 
 int	execute_routine(t_philo *philo, int i)
 {
-	if ((i <= philo->target_meals || philo->target_meals == -1)
-		&& philo->controller->dead_flag == 0)
+	if ((i <= philo->target_meals || philo->target_meals == -1))
 		if (philo_eat(philo) != 0)
 			return (1);
 	if ((i <= philo->target_meals || philo->target_meals == -1))

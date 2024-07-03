@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/03 13:15:01 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:18:48 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	*supervisor(void *philo_pointer)
 			return (NULL);
 		}
 		//pthread_mutex_unlock(&controller->lock);
-		ft_usleep(1);
+		ft_usleep(10);
 	}
 	return (NULL);
 }

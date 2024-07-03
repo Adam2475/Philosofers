@@ -6,7 +6,7 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 10:47:28 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/03 14:01:49 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:05:54 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	*monitoring(void *philo_pointer)
 			pthread_mutex_unlock(&philo->controller->state_lock);
 			return (NULL);
 		}
-		ft_usleep(1);
+		ft_usleep(3);
 	}
 	return (NULL);
 }
@@ -39,24 +39,21 @@ void	*monitoring(void *philo_pointer)
 void	*supervisor(void *philo_pointer)
 {
 	t_controller	*controller;
-	int				data[3];
+	int				data[2];
 
 	controller = (t_controller *)philo_pointer;
 	while (1)
 	{
 		pthread_mutex_lock(&controller->state_lock);
-		data[2] = controller->exit_flag;
+		data[1] = controller->exit_flag;
 		pthread_mutex_unlock(&controller->state_lock);
-		pthread_mutex_lock(&controller->dead_lock);
-		data[0] = controller->dead_flag;
-		pthread_mutex_unlock(&controller->dead_lock);
 		pthread_mutex_lock(&controller->ultimate_lock);
-		data[1] = controller->win_flag;
+		data[0] = controller->win_flag;
 		pthread_mutex_unlock(&controller->ultimate_lock);
-		if (data[0] > 0 || data[1] > 0 || data[2])
+		if (data[0] > 0 || data[1] > 0)
 		{
 			pthread_mutex_lock(&controller->dead_lock);
-			controller->dead_flag = true;
+			controller->living_flag = true;
 			pthread_mutex_unlock(&controller->dead_lock);
 			return (NULL);
 		}

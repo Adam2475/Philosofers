@@ -6,11 +6,18 @@
 /*   By: adapassa <adapassa@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 11:29:31 by adapassa          #+#    #+#             */
-/*   Updated: 2024/07/03 15:23:38 by adapassa         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:31:24 by adapassa         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static	int	plug_anale(t_philo *philo)
+{
+	philo_die(philo);
+	pthread_mutex_unlock(&philo->controller->dead_lock);
+	return (1);
+}
 
 int	check_death(t_philo *philo, int nb)
 {
@@ -33,11 +40,7 @@ int	check_death(t_philo *philo, int nb)
 	{
 		pthread_mutex_lock(&philo->controller->dead_lock);
 		if (tmp1[0] != true)
-		{
-			philo_die(philo);
-			pthread_mutex_unlock(&philo->controller->dead_lock);
-			return (1);
-		}
+			return (plug_anale(philo));
 		pthread_mutex_unlock(&philo->controller->dead_lock);
 	}
 	return (0);
